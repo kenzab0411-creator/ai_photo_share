@@ -2,33 +2,47 @@
 <html lang="ja">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>ユーザー登録 | 写真共有アプリ</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   </head>
   <body>
-    <h1>ユーザー登録</h1>
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a class="brand" href="{{ url_for('index') }}">写真共有アプリ</a>
+        <a class="button button--light" href="{{ url_for('login') }}">ログイン</a>
+      </div>
+    </header>
 
-    <form method="post">
-      {{ form.hidden_tag() }}
+    <main class="page page--narrow">
+      <section class="form-card">
+        <p class="eyebrow">CREATE ACCOUNT</p>
+        <h1>ユーザー登録</h1>
+        <p class="lead">写真を共有する準備を始めましょう。</p>
 
-      <p>
-        {{ form.username.label }}<br>
-        {{ form.username() }}
-        {% for error in form.username.errors %}<br><span>{{ error }}</span>{% endfor %}
-      </p>
-      <p>
-        {{ form.password.label }}<br>
-        {{ form.password() }}
-        {% for error in form.password.errors %}<br><span>{{ error }}</span>{% endfor %}
-      </p>
-      <p>
-        {{ form.password_confirmation.label }}<br>
-        {{ form.password_confirmation() }}
-        {% for error in form.password_confirmation.errors %}<br><span>{{ error }}</span>{% endfor %}
-      </p>
-      {{ form.submit() }}
-    </form>
+        <form method="post">
+          {{ form.hidden_tag() }}
 
-    <p><a href="{{ url_for('login') }}">ログインはこちら</a></p>
-    <p><a href="{{ url_for('index') }}">トップへ戻る</a></p>
+          <p class="field">
+            {{ form.username.label }}
+            {{ form.username() }}
+            {% for error in form.username.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+          </p>
+          <p class="field">
+            {{ form.password.label }}
+            {{ form.password() }}
+            {% for error in form.password.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+          </p>
+          <p class="field">
+            {{ form.password_confirmation.label }}
+            {{ form.password_confirmation() }}
+            {% for error in form.password_confirmation.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+          </p>
+          {{ form.submit(class_="button button--primary button--full") }}
+        </form>
+
+        <p class="form-footer">登録済みですか？ <a href="{{ url_for('login') }}">ログインはこちら</a></p>
+      </section>
+    </main>
   </body>
 </html>

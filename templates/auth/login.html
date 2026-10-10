@@ -2,38 +2,52 @@
 <html lang="ja">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>ログイン | 写真共有アプリ</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   </head>
   <body>
-    <h1>ログイン</h1>
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a class="brand" href="{{ url_for('index') }}">写真共有アプリ</a>
+        <a class="button button--light" href="{{ url_for('register') }}">ユーザー登録</a>
+      </div>
+    </header>
 
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <ul>
-          {% for message in messages %}
-            <li>{{ message }}</li>
-          {% endfor %}
-        </ul>
-      {% endif %}
-    {% endwith %}
+    <main class="page page--narrow">
+      <section class="form-card">
+        <p class="eyebrow">WELCOME BACK</p>
+        <h1>ログイン</h1>
+        <p class="lead">共有した写真を見にいきましょう。</p>
 
-    <form method="post">
-      {{ form.hidden_tag() }}
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul class="flash-messages">
+              {% for message in messages %}
+                <li>{{ message }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
 
-      <p>
-        {{ form.username.label }}<br>
-        {{ form.username() }}
-        {% for error in form.username.errors %}<br><span>{{ error }}</span>{% endfor %}
-      </p>
-      <p>
-        {{ form.password.label }}<br>
-        {{ form.password() }}
-        {% for error in form.password.errors %}<br><span>{{ error }}</span>{% endfor %}
-      </p>
-      {{ form.submit() }}
-    </form>
+        <form method="post">
+          {{ form.hidden_tag() }}
 
-    <p><a href="{{ url_for('register') }}">ユーザー登録はこちら</a></p>
-    <p><a href="{{ url_for('index') }}">トップへ戻る</a></p>
+          <p class="field">
+            {{ form.username.label }}
+            {{ form.username() }}
+            {% for error in form.username.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+          </p>
+          <p class="field">
+            {{ form.password.label }}
+            {{ form.password() }}
+            {% for error in form.password.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+          </p>
+          {{ form.submit(class_="button button--primary button--full") }}
+        </form>
+
+        <p class="form-footer">はじめてですか？ <a href="{{ url_for('register') }}">ユーザー登録はこちら</a></p>
+      </section>
+    </main>
   </body>
 </html>

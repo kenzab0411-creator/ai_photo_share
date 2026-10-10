@@ -1,1 +1,11 @@
 .venv/
+
+# Environment variables and local application data
+.env
+__pycache__/
+*.py[cod]
+instance/
+
+# User-uploaded images (keep the empty directory marker)
+uploads/posts/*
+!uploads/posts/.gitkeep

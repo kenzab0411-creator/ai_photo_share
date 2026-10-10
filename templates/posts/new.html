@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>写真を投稿 | 写真共有アプリ</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a class="brand" href="{{ url_for('index') }}">写真共有アプリ</a>
+        <a class="button button--light" href="{{ url_for('index') }}">一覧へ戻る</a>
+      </div>
+    </header>
+
+    <main class="page page--narrow">
+      <section class="form-card">
+        <p class="eyebrow">NEW POST</p>
+        <h1>写真を投稿</h1>
+        <p class="lead">PNG、JPG、JPEG、GIF形式、5MBまで投稿できます。</p>
+
+        <form method="post" enctype="multipart/form-data">
+          {{ form.hidden_tag() }}
+          <p class="field">
+            {{ form.image.label }}
+            {{ form.image(accept='.png,.jpg,.jpeg,.gif') }}
+            {% for error in form.image.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+          </p>
+          <p class="field">
+            {{ form.caption.label }}
+            {{ form.caption(rows=4, placeholder='写真にひとこと添える') }}
+            {% for error in form.caption.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+          </p>
+          {{ form.submit(class_="button button--primary button--full") }}
+        </form>
+      </section>
+    </main>
+  </body>
+</html>

@@ -2,30 +2,76 @@
 <html lang="ja">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>写真共有アプリ</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   </head>
   <body>
-    <h1>写真共有アプリ</h1>
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a class="brand" href="{{ url_for('index') }}">写真共有アプリ</a>
+        {% if current_user.is_authenticated %}
+          <div class="header-actions">
+            <a class="button button--accent" href="{{ url_for('post_create') }}">写真を投稿</a>
+            <form method="post" action="{{ url_for('logout') }}">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button class="button button--light" type="submit">ログアウト</button>
+            </form>
+          </div>
+        {% else %}
+          <a class="button button--light" href="{{ url_for('login') }}">ログイン</a>
+        {% endif %}
+      </div>
+    </header>
 
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <ul>
-          {% for message in messages %}
-            <li>{{ message }}</li>
-          {% endfor %}
-        </ul>
-      {% endif %}
-    {% endwith %}
+    <main class="page">
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <ul class="flash-messages">
+            {% for message in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      {% endwith %}
 
-    {% if current_user.is_authenticated %}
-      <p>{{ current_user.username }} としてログイン中です。</p>
-      <form method="post" action="{{ url_for('logout') }}">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <button type="submit">ログアウト</button>
-      </form>
-    {% else %}
-      <p><a href="{{ url_for('register') }}">ユーザー登録</a></p>
-      <p><a href="{{ url_for('login') }}">ログイン</a></p>
-    {% endif %}
+      <section class="hero-card hero-card--compact">
+        <p class="eyebrow">SHARE YOUR MOMENTS</p>
+        <h1>写真を、もっと気軽に。</h1>
+        {% if current_user.is_authenticated %}
+          <p class="lead">{{ current_user.username }} さん、ログイン中です。</p>
+          <a class="button button--primary" href="{{ url_for('post_create') }}">写真を投稿する</a>
+        {% else %}
+          <p class="lead">友人との日常や旅の一枚を、ここで共有しましょう。</p>
+          <div class="button-row">
+            <a class="button button--primary" href="{{ url_for('register') }}">ユーザー登録</a>
+            <a class="button button--outline" href="{{ url_for('login') }}">ログイン</a>
+          </div>
+        {% endif %}
+      </section>
+
+      <section class="post-section">
+        <div class="section-heading">
+          <p class="eyebrow">LATEST PHOTOS</p>
+          <h2>みんなの写真</h2>
+        </div>
+
+        {% if posts %}
+          <div class="post-grid">
+            {% for post in posts %}
+              <article class="post-card">
+                <img src="{{ url_for('uploaded_post_image', filename=post.image_filename) }}" alt="{{ post.caption or '投稿された写真' }}">
+                <div class="post-card__body">
+                  <p class="post-card__meta">{{ post.user.username }} · {{ post.created_at.strftime('%Y/%m/%d %H:%M') }}</p>
+                  {% if post.caption %}<p class="post-card__caption">{{ post.caption }}</p>{% endif %}
+                </div>
+              </article>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p class="empty-state">まだ投稿はありません。</p>
+        {% endif %}
+      </section>
+    </main>
   </body>
 </html>

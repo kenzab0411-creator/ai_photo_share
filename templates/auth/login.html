@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <title>ログイン | 写真共有アプリ</title>
+  </head>
+  <body>
+    <h1>ログイン</h1>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <form method="post">
+      {{ form.hidden_tag() }}
+
+      <p>
+        {{ form.username.label }}<br>
+        {{ form.username() }}
+        {% for error in form.username.errors %}<br><span>{{ error }}</span>{% endfor %}
+      </p>
+      <p>
+        {{ form.password.label }}<br>
+        {{ form.password() }}
+        {% for error in form.password.errors %}<br><span>{{ error }}</span>{% endfor %}
+      </p>
+      {{ form.submit() }}
+    </form>
+
+    <p><a href="{{ url_for('register') }}">ユーザー登録はこちら</a></p>
+    <p><a href="{{ url_for('index') }}">トップへ戻る</a></p>
+  </body>
+</html>
